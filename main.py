@@ -1,337 +1,574 @@
 import streamlit as st
-import random
+
+# ==========================================
+# 페이지 설정
+# ==========================================
 
 st.set_page_config(
-    page_title="MBTI 여행 처방전 💌",
-    page_icon="💗",
+    page_title="LOVE TAROT · MBTI",
+    page_icon="🔮",
     layout="centered"
 )
 
-# =========================
-# CSS
-# =========================
+# ==========================================
+# 신비로운 디자인 CSS
+# ==========================================
 
 st.markdown("""
 <style>
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
 .stApp {
-    background: linear-gradient(180deg, #fff7fb 0%, #f8f4ff 100%);
+    background:
+        radial-gradient(circle at 50% 10%, rgba(108, 72, 170, 0.35), transparent 30%),
+        radial-gradient(circle at 10% 80%, rgba(82, 45, 130, 0.25), transparent 30%),
+        linear-gradient(180deg, #10091d 0%, #170d29 50%, #0c0715 100%);
+    color: #f8edf9;
 }
 
-.main-title {
+/* 별 배경 */
+.stApp::before {
+    content: "✦  ·  ✧     ·     ✦        ·  ✧     ✦   ·      ✧     ·     ✦";
+    position: fixed;
+    top: 5%;
+    left: 0;
+    width: 100%;
+    color: rgba(255, 226, 255, 0.5);
+    font-size: 17px;
+    letter-spacing: 14px;
+    line-height: 3;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* 전체 컨테이너 */
+.block-container {
+    max-width: 760px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+/* 제목 */
+.title {
     text-align: center;
-    color: #ff7fa8;
-    font-size: 40px;
-    font-weight: 800;
-    margin-top: 10px;
-    margin-bottom: 5px;
+    font-family: 'Cinzel', serif;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: #f5d98b;
+    text-shadow:
+        0 0 8px rgba(245, 217, 139, 0.5),
+        0 0 25px rgba(173, 103, 255, 0.4);
 }
 
 .subtitle {
     text-align: center;
-    color: #9a8fa3;
-    font-size: 17px;
-    margin-bottom: 30px;
-}
-
-.card {
-    background: white;
-    border-radius: 25px;
-    padding: 35px 30px;
-    margin-top: 25px;
-    box-shadow: 0 8px 25px rgba(180, 150, 180, 0.15);
-    border: 2px solid #ffdce9;
-    text-align: center;
-}
-
-.place {
-    color: #ff6f9c;
-    font-size: 32px;
-    font-weight: 800;
-    margin-top: 10px;
-}
-
-.travel-type {
-    color: #9a8fa3;
-    font-size: 17px;
+    color: #c9b7d9;
+    font-size: 14px;
+    letter-spacing: 2px;
     margin-top: 8px;
+    margin-bottom: 35px;
 }
 
-.emoji {
-    font-size: 65px;
+/* 달 */
+.moon {
+    text-align: center;
+    font-size: 70px;
+    margin-bottom: -5px;
+    filter: drop-shadow(0 0 15px rgba(255, 231, 155, 0.5));
 }
 
-.tags {
-    margin-top: 20px;
+/* 선택 영역 */
+.select-title {
+    text-align: center;
+    color: #e9d3ef;
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 10px;
 }
 
-.tag {
+/* selectbox */
+div[data-baseweb="select"] > div {
+    background-color: rgba(255,255,255,0.06);
+    border: 1px solid #a875c9;
+    border-radius: 12px;
+    color: white;
+}
+
+div[data-baseweb="select"] span {
+    color: #f5e9f8;
+}
+
+/* 타로 카드 */
+.tarot-card {
+    position: relative;
+    margin-top: 35px;
+    padding: 42px 35px;
+    border-radius: 22px;
+    background:
+        radial-gradient(circle at 50% 30%, rgba(125, 74, 176, 0.25), transparent 40%),
+        linear-gradient(145deg, #211332, #120b1e);
+    border: 1px solid #c69b54;
+    box-shadow:
+        0 0 0 5px rgba(198,155,84,0.07),
+        0 0 30px rgba(155, 94, 218, 0.25),
+        inset 0 0 35px rgba(0,0,0,0.35);
+}
+
+/* 카드 장식 */
+.card-symbol {
+    text-align: center;
+    font-size: 60px;
+    margin-bottom: 8px;
+    filter: drop-shadow(0 0 12px rgba(245,217,139,0.45));
+}
+
+.card-small {
+    text-align: center;
+    color: #c9a45e;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 4px;
+}
+
+.card-place {
+    text-align: center;
+    color: #f5d98b;
+    font-family: 'Cinzel', serif;
+    font-size: 30px;
+    font-weight: 700;
+    margin-top: 10px;
+    text-shadow: 0 0 15px rgba(245,217,139,0.25);
+}
+
+.card-type {
+    text-align: center;
+    color: #d9c8e5;
+    margin-top: 8px;
+    font-size: 15px;
+}
+
+.divider {
+    height: 1px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #c69b54,
+        transparent
+    );
+    margin: 25px 0;
+}
+
+/* 내용 박스 */
+.info-title {
+    color: #f5d98b;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.info-text {
+    color: #ded2e5;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+/* 키워드 */
+.keyword-area {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.keyword {
     display: inline-block;
-    background: #ffe5ef;
-    color: #e96791;
-    border-radius: 20px;
     padding: 7px 14px;
     margin: 4px;
-    font-size: 14px;
-    font-weight: 600;
+    border-radius: 20px;
+    border: 1px solid #8e67a8;
+    background: rgba(142,103,168,0.12);
+    color: #e8d6ef;
+    font-size: 13px;
 }
 
-.reason {
-    background: #fff5f9;
-    border-radius: 18px;
-    padding: 20px;
-    color: #665b68;
-    line-height: 1.8;
-    text-align: left;
-    margin-top: 22px;
-}
-
+/* 하단 문구 */
 .footer {
     text-align: center;
-    color: #b0a5b3;
-    font-size: 13px;
+    color: #897597;
+    font-size: 12px;
     margin-top: 35px;
+    letter-spacing: 1px;
 }
+
+/* 버튼 */
+.stButton > button {
+    width: 100%;
+    border-radius: 12px;
+    border: 1px solid #c69b54;
+    background: rgba(198,155,84,0.08);
+    color: #f5d98b;
+    height: 45px;
+    font-size: 14px;
+}
+
+.stButton > button:hover {
+    border-color: #f5d98b;
+    color: white;
+    background: rgba(198,155,84,0.15);
+}
+
 </style>
 """, unsafe_allow_html=True)
 
 
-# =========================
-# 여행지 데이터
-# =========================
+# ==========================================
+# MBTI 데이터
+# ==========================================
 
-travel_data = {
+mbti_data = {
+
     "ISTJ": {
-        "place": "교토 🇯🇵",
-        "emoji": "⛩️",
-        "type": "차분하고 계획적인 여행",
-        "reason": "정돈된 거리와 전통적인 분위기 속에서 여유롭게 여행하기 좋아요. 미리 계획한 일정대로 움직이면서 교토의 예쁜 골목과 사찰을 천천히 둘러보는 여행을 추천해요.",
-        "tags": ["#계획여행", "#전통미", "#조용한여행"]
+        "symbol": "⚖️",
+        "name": "THE DEVOTED",
+        "type": "신뢰를 쌓아가는 사랑",
+        "style": "쉽게 마음을 열지는 않지만 한번 마음을 주면 오래도록 관계를 지키려는 편이에요.",
+        "love": "말보다 행동으로 마음을 표현하는 경우가 많아요. 상대방의 약속을 기억하고 필요한 것을 챙겨주는 식으로 애정을 보여줘요.",
+        "attraction": "상대방에게 안정감과 신뢰가 느껴질 때 천천히 호감이 깊어져요.",
+        "date": "조용한 카페에서 이야기하기 · 계획적인 여행 · 함께 맛있는 식사하기",
+        "keywords": ["#신뢰", "#안정감", "#꾸준함", "#책임감"]
     },
 
     "ISFJ": {
-        "place": "후쿠오카 🇯🇵",
-        "emoji": "🍜",
-        "type": "따뜻하고 편안한 여행",
-        "reason": "복잡하지 않으면서 맛있는 음식과 아기자기한 공간을 즐길 수 있어요. 맛집을 찾아다니고 예쁜 카페에서 쉬는 힐링 여행과 잘 어울려요.",
-        "tags": ["#힐링", "#맛집투어", "#소소한행복"]
+        "symbol": "🌙",
+        "name": "THE TENDER HEART",
+        "type": "따뜻하게 감싸주는 사랑",
+        "style": "상대방의 작은 변화도 알아차리고 세심하게 챙겨주는 다정한 연애를 하는 편이에요.",
+        "love": "상대가 좋아하는 음식이나 사소한 취향을 기억해두었다가 챙겨주는 식으로 마음을 표현해요.",
+        "attraction": "자신을 편안하게 해주고 진심으로 배려해주는 사람에게 마음이 가기 쉬워요.",
+        "date": "예쁜 카페 · 맛집 탐방 · 함께 영화 보기 · 소소한 산책",
+        "keywords": ["#다정함", "#배려", "#안정", "#세심함"]
     },
 
     "INFJ": {
-        "place": "스위스 🇨🇭",
-        "emoji": "🏔️",
-        "type": "마음이 깊어지는 여행",
-        "reason": "웅장한 자연을 바라보며 혼자만의 생각에 잠기기 좋은 곳이에요. 아름다운 풍경 속에서 천천히 걷고 사진을 남기며 자신만의 시간을 가져보세요.",
-        "tags": ["#자연", "#감성여행", "#혼자만의시간"]
+        "symbol": "🌌",
+        "name": "THE MYSTIC",
+        "type": "깊은 마음을 나누는 사랑",
+        "style": "겉으로는 차분해 보여도 마음속에서는 상대방과의 관계를 깊게 생각하는 편이에요.",
+        "love": "상대방의 말에 담긴 의미를 세심하게 살피고 진솔한 대화를 통해 애정을 표현해요.",
+        "attraction": "겉모습보다 자신의 가치관이나 생각을 이해해주는 사람에게 끌리는 편이에요.",
+        "date": "밤 산책 · 조용한 카페 · 전시회 · 오래 이야기할 수 있는 장소",
+        "keywords": ["#깊은대화", "#공감", "#낭만", "#진심"]
     },
 
     "INTJ": {
-        "place": "싱가포르 🇸🇬",
-        "emoji": "🌃",
-        "type": "효율적인 도시 탐험",
-        "reason": "깔끔하고 체계적인 도시 환경과 다양한 볼거리를 한 번에 즐길 수 있어요. 동선을 효율적으로 짜서 여러 명소를 둘러보는 여행이 잘 어울려요.",
-        "tags": ["#도시여행", "#효율적인동선", "#스마트여행"]
+        "symbol": "🔮",
+        "name": "THE STRATEGIST",
+        "type": "천천히 깊어지는 사랑",
+        "style": "누군가를 좋아한다고 바로 표현하기보다 상대방을 충분히 알아가는 시간을 갖는 편이에요.",
+        "love": "상대방의 목표를 응원하거나 문제를 함께 해결해주는 방식으로 마음을 표현해요.",
+        "attraction": "자신만의 생각과 목표가 있고 지적인 대화를 할 수 있는 사람에게 매력을 느끼기 쉬워요.",
+        "date": "전시회 · 여행 계획 세우기 · 서점 데이트 · 깊은 대화",
+        "keywords": ["#신중함", "#지적대화", "#독립적", "#깊이"]
     },
 
     "ISTP": {
-        "place": "제주도 🇰🇷",
-        "emoji": "🏄",
-        "type": "자유로운 액티비티 여행",
-        "reason": "정해진 일정에 얽매이기보다 그날의 기분에 따라 움직여보세요. 드라이브, 서핑, 오름 등 하고 싶은 걸 골라 즐기는 여행을 추천해요.",
-        "tags": ["#자유여행", "#액티비티", "#드라이브"]
+        "symbol": "🗡️",
+        "name": "THE FREE SOUL",
+        "type": "자유롭고 솔직한 사랑",
+        "style": "서로의 자유를 존중하면서 부담 없이 자연스럽게 가까워지는 연애를 선호하는 편이에요.",
+        "love": "말보다는 함께 무언가를 하면서 자연스럽게 애정을 표현해요.",
+        "attraction": "간섭이 적고 서로의 개성을 존중해주는 사람에게 편안함을 느끼기 쉬워요.",
+        "date": "드라이브 · 액티비티 · 맛집 탐방 · 즉흥 여행",
+        "keywords": ["#자유", "#솔직함", "#즉흥", "#편안함"]
     },
 
     "ISFP": {
-        "place": "파리 🇫🇷",
-        "emoji": "🎨",
-        "type": "감성 가득한 여행",
-        "reason": "예쁜 거리와 미술관, 카페를 천천히 구경하면서 순간순간의 분위기를 즐겨보세요. 사진 찍기 좋은 장소를 발견하는 재미도 가득해요.",
-        "tags": ["#감성", "#미술관", "#카페투어"]
+        "symbol": "🌹",
+        "name": "THE ROMANTIC",
+        "type": "감각적인 낭만을 즐기는 사랑",
+        "style": "연애의 순간순간에서 느껴지는 감정과 분위기를 중요하게 생각하는 편이에요.",
+        "love": "작은 선물이나 예쁜 장소, 함께하는 특별한 순간으로 마음을 표현하는 경우가 많아요.",
+        "attraction": "따뜻하고 부드러운 분위기를 가진 사람에게 자연스럽게 끌릴 수 있어요.",
+        "date": "미술관 · 예쁜 카페 · 공원 산책 · 사진 찍기",
+        "keywords": ["#감성", "#낭만", "#예술", "#순수함"]
     },
 
     "INFP": {
-        "place": "아이슬란드 🇮🇸",
-        "emoji": "🌌",
-        "type": "동화 같은 여행",
-        "reason": "현실에서 잠시 벗어나고 싶을 때 딱 좋은 여행지예요. 오로라와 폭포, 빙하를 바라보면서 특별한 순간을 경험해보세요.",
-        "tags": ["#동화같은풍경", "#오로라", "#낭만"]
+        "symbol": "🪽",
+        "name": "THE DREAMER",
+        "type": "동화 같은 사랑",
+        "style": "사랑에 대한 이상과 자신만의 낭만을 중요하게 생각하는 편이에요.",
+        "love": "상대방의 이야기를 오래 들어주고 감정을 깊이 공감하면서 마음을 표현해요.",
+        "attraction": "자신의 내면을 이해해주고 진심으로 공감해주는 사람에게 마음이 깊어지기 쉬워요.",
+        "date": "별 보기 · 밤 산책 · 감성 카페 · 여행",
+        "keywords": ["#낭만", "#공감", "#순수", "#감성"]
     },
 
     "INTP": {
-        "place": "런던 🇬🇧",
-        "emoji": "📚",
-        "type": "호기심을 채우는 여행",
-        "reason": "박물관과 과학관, 독특한 서점과 다양한 문화 공간이 많아요. 하나의 장소를 방문해도 새로운 호기심을 마음껏 펼칠 수 있어요.",
-        "tags": ["#박물관", "#지적호기심", "#문화탐방"]
+        "symbol": "⭐",
+        "name": "THE OBSERVER",
+        "type": "호기심에서 시작되는 사랑",
+        "style": "상대방을 알아가는 과정 자체를 흥미롭게 느끼며 천천히 가까워지는 편이에요.",
+        "love": "관심 있는 주제로 이야기를 나누거나 상대방의 궁금증을 함께 해결하면서 친밀감을 표현해요.",
+        "attraction": "독특한 생각을 가지고 있고 대화가 잘 통하는 사람에게 관심이 생기기 쉬워요.",
+        "date": "서점 · 박물관 · 보드게임 · 새로운 장소 탐방",
+        "keywords": ["#호기심", "#대화", "#독특함", "#지적매력"]
     },
 
     "ESTP": {
-        "place": "방콕 🇹🇭",
-        "emoji": "🌴",
-        "type": "신나게 즐기는 여행",
-        "reason": "맛있는 음식부터 야시장, 액티비티까지 재미있는 것들이 가득해요. 현장에서 즉흥적으로 새로운 경험을 찾아다니는 여행을 추천해요.",
-        "tags": ["#즉흥여행", "#액티비티", "#야시장"]
+        "symbol": "🔥",
+        "name": "THE ADVENTURER",
+        "type": "짜릿하고 생생한 사랑",
+        "style": "좋아하는 사람과 직접 다양한 경험을 하면서 관계를 만들어가는 편이에요.",
+        "love": "재미있는 데이트를 계획하거나 즉흥적으로 새로운 경험을 함께 하며 마음을 표현해요.",
+        "attraction": "자신감 있고 함께 있을 때 즐거운 에너지를 주는 사람에게 끌리기 쉬워요.",
+        "date": "놀이공원 · 스포츠 · 여행 · 맛집 투어",
+        "keywords": ["#열정", "#모험", "#즉흥", "#즐거움"]
     },
 
     "ESFP": {
-        "place": "하와이 🇺🇸",
-        "emoji": "🌺",
-        "type": "행복 충전 여행",
-        "reason": "예쁜 바다와 맛있는 음식, 다양한 액티비티를 한꺼번에 즐길 수 있어요. 친구들과 함께 떠나면 더욱 신나는 추억을 만들 수 있어요.",
-        "tags": ["#바다", "#친구여행", "#행복충전"]
+        "symbol": "☀️",
+        "name": "THE SUN",
+        "type": "행복을 나누는 사랑",
+        "style": "좋아하는 사람과 함께하는 순간 자체를 즐기며 밝고 표현력 있는 연애를 하는 편이에요.",
+        "love": "칭찬이나 애정 표현을 직접적으로 하고 함께 재미있는 추억을 만드는 것을 좋아해요.",
+        "attraction": "자신의 모습을 편하게 보여줄 수 있고 함께 웃을 수 있는 사람에게 끌리기 쉬워요.",
+        "date": "축제 · 맛집 · 놀이공원 · 여행",
+        "keywords": ["#행복", "#표현력", "#활발함", "#추억"]
     },
 
     "ENFP": {
-        "place": "바르셀로나 🇪🇸",
-        "emoji": "🍊",
-        "type": "두근두근 모험 여행",
-        "reason": "독특한 건축물과 맛있는 음식, 활기찬 거리가 가득한 곳이에요. 우연히 발견한 골목에서 새로운 장소를 만나는 여행이 잘 어울려요.",
-        "tags": ["#모험", "#즉흥", "#새로운경험"]
+        "symbol": "✨",
+        "name": "THE SPARK",
+        "type": "설렘이 가득한 사랑",
+        "style": "좋아하는 사람이 생기면 관계의 가능성을 상상하며 빠르게 설렘을 느낄 수 있어요.",
+        "love": "재미있는 이야기와 장난, 깜짝 이벤트 등 다양한 방법으로 마음을 표현해요.",
+        "attraction": "자신의 개성을 존중하면서 함께 새로운 것을 경험할 수 있는 사람에게 끌리기 쉬워요.",
+        "date": "즉흥 여행 · 새로운 맛집 · 전시 · 야경",
+        "keywords": ["#설렘", "#호기심", "#자유", "#열정"]
     },
 
     "ENTP": {
-        "place": "뉴욕 🇺🇸",
-        "emoji": "🗽",
-        "type": "새로운 자극을 찾아서",
-        "reason": "매일 새로운 일이 일어나는 듯한 도시예요. 다양한 사람과 문화, 음식과 전시를 경험하면서 새로운 아이디어를 얻을 수 있어요.",
-        "tags": ["#도시탐험", "#새로운자극", "#문화"]
+        "symbol": "☄️",
+        "name": "THE WILDCARD",
+        "type": "예측할 수 없는 두근거림",
+        "style": "연애에서도 새로운 자극과 재미있는 대화를 중요하게 생각하는 편이에요.",
+        "love": "장난과 토론, 재미있는 아이디어를 공유하면서 자연스럽게 호감을 표현해요.",
+        "attraction": "자신만의 생각이 뚜렷하고 대화가 흥미로운 사람에게 관심이 생기기 쉬워요.",
+        "date": "새로운 맛집 · 전시회 · 여행 · 이색 체험",
+        "keywords": ["#재치", "#토론", "#자극", "#호기심"]
     },
 
     "ESTJ": {
-        "place": "도쿄 🇯🇵",
-        "emoji": "🗼",
-        "type": "알차고 완벽한 여행",
-        "reason": "볼거리와 먹거리가 정말 많아서 계획을 세워 움직이기 좋아요. 쇼핑부터 관광까지 하루를 알차게 채워보세요.",
-        "tags": ["#알찬여행", "#쇼핑", "#도시여행"]
+        "symbol": "👑",
+        "name": "THE LEADER",
+        "type": "확실하고 책임감 있는 사랑",
+        "style": "관계에서도 자신의 마음과 의도를 비교적 명확하게 표현하는 편이에요.",
+        "love": "상대방에게 필요한 것을 직접 해결해주거나 계획을 세우며 마음을 표현해요.",
+        "attraction": "자신의 삶을 책임감 있게 살아가며 서로 약속을 지킬 수 있는 사람에게 끌리기 쉬워요.",
+        "date": "맛집 · 여행 · 쇼핑 · 계획적인 데이트",
+        "keywords": ["#책임감", "#확실함", "#추진력", "#신뢰"]
     },
 
     "ESFJ": {
-        "place": "이탈리아 🇮🇹",
-        "emoji": "🍝",
-        "type": "함께라서 더 행복한 여행",
-        "reason": "맛있는 음식과 아름다운 풍경을 사랑하는 사람과 함께 즐기기 좋은 곳이에요. 사진도 많이 찍고 맛있는 것도 함께 나눠 먹어보세요.",
-        "tags": ["#친구와함께", "#맛있는여행", "#추억"]
+        "symbol": "💐",
+        "name": "THE LOVER",
+        "type": "마음을 아낌없이 나누는 사랑",
+        "style": "상대방과 함께하는 시간을 소중하게 생각하고 애정을 적극적으로 표현하는 편이에요.",
+        "love": "상대방의 기념일이나 취향을 기억하고 작은 이벤트를 준비하는 식으로 사랑을 표현해요.",
+        "attraction": "따뜻하고 예의 바르며 자신의 마음을 솔직하게 표현하는 사람에게 끌리기 쉬워요.",
+        "date": "맛집 · 카페 · 쇼핑 · 기념일 데이트",
+        "keywords": ["#애정표현", "#배려", "#다정함", "#추억"]
     },
 
     "ENFJ": {
-        "place": "캐나다 🇨🇦",
-        "emoji": "🍁",
-        "type": "사람과 자연을 모두 만나는 여행",
-        "reason": "아름다운 자연과 다양한 도시 문화를 함께 경험할 수 있어요. 소중한 사람들과 이야기를 나누며 여행할 때 더욱 즐거워요.",
-        "tags": ["#소중한사람", "#자연", "#추억"]
+        "symbol": "💫",
+        "name": "THE GUIDE",
+        "type": "서로를 성장시키는 사랑",
+        "style": "상대방의 감정과 상황을 세심하게 살피면서 관계를 발전시켜 나가는 편이에요.",
+        "love": "상대방의 꿈이나 고민을 진심으로 들어주고 응원하며 애정을 표현해요.",
+        "attraction": "진솔한 대화를 할 수 있고 서로에게 긍정적인 영향을 줄 수 있는 사람에게 끌리기 쉬워요.",
+        "date": "전시회 · 여행 · 카페 · 함께하는 취미",
+        "keywords": ["#공감", "#응원", "#성장", "#진심"]
     },
 
     "ENTJ": {
-        "place": "두바이 🇦🇪",
-        "emoji": "🏙️",
-        "type": "스케일 큰 여행",
-        "reason": "화려한 건축물과 다양한 경험을 한 번에 즐길 수 있어요. 목표를 정하고 하나씩 새로운 경험을 해보는 여행과 잘 어울려요.",
-        "tags": ["#럭셔리", "#도시", "#버킷리스트"]
+        "symbol": "🌟",
+        "name": "THE COMMANDER",
+        "type": "열정적으로 이끄는 사랑",
+        "style": "좋아하는 사람에게 적극적으로 다가가고 관계를 발전시키기 위해 행동하는 편이에요.",
+        "love": "상대방의 목표를 지원하고 함께 미래를 계획하면서 마음을 표현해요.",
+        "attraction": "자신의 의견과 목표가 분명하고 함께 성장할 수 있는 사람에게 끌리기 쉬워요.",
+        "date": "여행 · 새로운 레스토랑 · 전시 · 특별한 이벤트",
+        "keywords": ["#열정", "#목표", "#추진력", "#성장"]
     }
 }
 
 
-# =========================
+# ==========================================
 # 제목
-# =========================
+# ==========================================
+
+st.markdown('<div class="moon">☾</div>', unsafe_allow_html=True)
 
 st.markdown(
-    '<div class="main-title">💗 MBTI 여행 처방전 💌</div>',
+    '<div class="title">LOVE TAROT</div>',
     unsafe_allow_html=True
 )
 
 st.markdown(
-    '<div class="subtitle">당신의 MBTI에게 딱 맞는 여행지를 찾아드릴게요 ✈️</div>',
+    '<div class="subtitle">YOUR MBTI · YOUR LOVE STORY</div>',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    '<div class="select-title">✦ 당신의 MBTI를 선택해주세요 ✦</div>',
     unsafe_allow_html=True
 )
 
 
-# =========================
+# ==========================================
 # MBTI 선택
-# =========================
-
-st.markdown("### 💗 먼저 당신의 MBTI를 골라주세요!")
+# ==========================================
 
 mbti = st.selectbox(
     "MBTI",
-    list(travel_data.keys()),
+    list(mbti_data.keys()),
     index=None,
-    placeholder="MBTI를 선택해주세요 ˶ᵔ ᵕ ᵔ˶"
+    placeholder="카드를 뽑기 전에 MBTI를 골라주세요",
+    label_visibility="collapsed"
 )
 
 
-# =========================
+# ==========================================
 # 결과
-# =========================
+# ==========================================
 
 if mbti:
 
-    data = travel_data[mbti]
+    data = mbti_data[mbti]
 
-    # 태그 HTML 만들기
-    tags_html = ""
+    keywords = ""
 
-    for tag in data["tags"]:
-        tags_html += f'<span class="tag">{tag}</span>'
+    for keyword in data["keywords"]:
+        keywords += f'<span class="keyword">{keyword}</span>'
 
-    # 카드
     st.markdown(
-        f'<div class="card">'
-        f'<div class="emoji">{data["emoji"]}</div>'
-        f'<div class="place">{data["place"]}</div>'
-        f'<div class="travel-type">{mbti} · {data["type"]}</div>'
-        f'<div class="tags">{tags_html}</div>'
-        f'<div class="reason">'
-        f'💌 <b>왜 여기가 잘 어울릴까요?</b><br><br>'
-        f'{data["reason"]}'
-        f'</div>'
-        f'</div>',
+        f"""
+<div class="tarot-card">
+
+    <div class="card-small">✦ THE LOVE CARD ✦</div>
+
+    <div class="card-symbol">
+        {data["symbol"]}
+    </div>
+
+    <div class="card-place">
+        {data["name"]}
+    </div>
+
+    <div class="card-type">
+        {mbti} · {data["type"]}
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="info-title">
+        ♡ 당신의 연애 스타일
+    </div>
+
+    <div class="info-text">
+        {data["style"]}
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="info-title">
+        ✦ 사랑할 때의 모습
+    </div>
+
+    <div class="info-text">
+        {data["love"]}
+    </div>
+
+    <br>
+
+    <div class="info-title">
+        ☾ 이런 사람에게 끌릴 수 있어요
+    </div>
+
+    <div class="info-text">
+        {data["attraction"]}
+    </div>
+
+    <br>
+
+    <div class="info-title">
+        ♧ 추천 데이트
+    </div>
+
+    <div class="info-text">
+        {data["date"]}
+    </div>
+
+    <div class="keyword-area">
+        {keywords}
+    </div>
+
+</div>
+""",
         unsafe_allow_html=True
     )
 
     st.write("")
 
-    if st.button(
-        "💗 다른 여행지도 궁금해!",
-        use_container_width=True
-    ):
-        other_places = [
-            value["place"]
-            for key, value in travel_data.items()
-            if key != mbti
-        ]
+    if st.button("🔮 다시 카드를 확인하기", use_container_width=True):
+        st.rerun()
 
-        random_place = random.choice(other_places)
-
-        st.success(
-            f"✨ 오늘의 깜짝 여행지는 **{random_place}**! ✨"
-        )
-
-
-# =========================
-# MBTI 선택 전 화면
-# =========================
 
 else:
 
     st.markdown(
-        '<div class="card">'
-        '<div class="emoji">🐰🌷</div>'
-        '<p style="color:#8f8394; font-size:16px;">'
-        '아직 여행지가 정해지지 않았어요!<br>'
-        '위에서 MBTI를 골라주세요 💕'
-        '</p>'
-        '</div>',
+        """
+<div class="tarot-card">
+
+    <div class="card-small">✦ MYSTIC LOVE ✦</div>
+
+    <div class="card-symbol">
+        🔮
+    </div>
+
+    <div class="card-place">
+        YOUR LOVE STORY
+    </div>
+
+    <div class="card-type">
+        아직 당신의 사랑 카드는 닫혀 있어요.
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="info-text" style="text-align:center;">
+        MBTI를 선택하면<br>
+        당신의 연애 스타일을 담은<br>
+        <b style="color:#f5d98b;">LOVE CARD</b>가 나타납니다.
+        <br><br>
+        ✦ 운명은 선택에서 시작됩니다 ✦
+    </div>
+
+</div>
+""",
         unsafe_allow_html=True
     )
 
 
-# =========================
+# ==========================================
 # 하단
-# =========================
+# ==========================================
 
 st.markdown(
     '<div class="footer">'
-    '✈️ 당신의 다음 여행이 조금 더 설레기를 바라요 ♡'
+    '✦ MBTI 특성을 바탕으로 한 재미있는 연애 콘텐츠입니다 ✦'
     '</div>',
     unsafe_allow_html=True
 )
