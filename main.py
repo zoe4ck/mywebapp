@@ -5,70 +5,46 @@ import streamlit as st
 # ==========================================
 
 st.set_page_config(
-    page_title="LOVE TAROT · MBTI",
+    page_title="LOVE TAROT",
     page_icon="🔮",
     layout="centered"
 )
 
 # ==========================================
-# 신비로운 디자인 CSS
+# 디자인
 # ==========================================
 
-st.markdown("""
+st.markdown(
+    """
 <style>
-
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 .stApp {
     background:
-        radial-gradient(circle at 50% 10%, rgba(108, 72, 170, 0.35), transparent 30%),
-        radial-gradient(circle at 10% 80%, rgba(82, 45, 130, 0.25), transparent 30%),
-        linear-gradient(180deg, #10091d 0%, #170d29 50%, #0c0715 100%);
+        radial-gradient(circle at 50% 10%, rgba(110, 70, 160, 0.35), transparent 30%),
+        radial-gradient(circle at 10% 80%, rgba(80, 40, 130, 0.25), transparent 30%),
+        linear-gradient(180deg, #10091d 0%, #170d29 50%, #0b0612 100%);
     color: #f8edf9;
 }
 
-/* 별 배경 */
-.stApp::before {
-    content: "✦  ·  ✧     ·     ✦        ·  ✧     ✦   ·      ✧     ·     ✦";
+/* 별 */
+.stApp:before {
+    content: "✦     ·     ✧       ✦     ·     ✧       ·     ✦";
     position: fixed;
-    top: 5%;
+    top: 30px;
     left: 0;
     width: 100%;
-    color: rgba(255, 226, 255, 0.5);
-    font-size: 17px;
-    letter-spacing: 14px;
-    line-height: 3;
+    text-align: center;
+    color: rgba(255, 225, 255, 0.45);
+    font-size: 18px;
+    letter-spacing: 8px;
     pointer-events: none;
-    z-index: 0;
 }
 
-/* 전체 컨테이너 */
+/* 화면 폭 */
 .block-container {
     max-width: 760px;
-    padding-top: 50px;
+    padding-top: 45px;
     padding-bottom: 50px;
-}
-
-/* 제목 */
-.title {
-    text-align: center;
-    font-family: 'Cinzel', serif;
-    font-size: 42px;
-    font-weight: 700;
-    letter-spacing: 5px;
-    color: #f5d98b;
-    text-shadow:
-        0 0 8px rgba(245, 217, 139, 0.5),
-        0 0 25px rgba(173, 103, 255, 0.4);
-}
-
-.subtitle {
-    text-align: center;
-    color: #c9b7d9;
-    font-size: 14px;
-    letter-spacing: 2px;
-    margin-top: 8px;
-    margin-bottom: 35px;
 }
 
 /* 달 */
@@ -76,79 +52,98 @@ st.markdown("""
     text-align: center;
     font-size: 70px;
     margin-bottom: -5px;
-    filter: drop-shadow(0 0 15px rgba(255, 231, 155, 0.5));
+    filter: drop-shadow(0 0 15px rgba(255, 225, 150, 0.6));
 }
 
-/* 선택 영역 */
+/* 제목 */
+.title {
+    text-align: center;
+    color: #f5d98b;
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 6px;
+    text-shadow: 0 0 20px rgba(245, 217, 139, 0.35);
+}
+
+.subtitle {
+    text-align: center;
+    color: #c5b4d4;
+    font-size: 13px;
+    letter-spacing: 3px;
+    margin-top: 8px;
+    margin-bottom: 38px;
+}
+
+/* 선택 안내 */
 .select-title {
     text-align: center;
-    color: #e9d3ef;
+    color: #ead8ef;
     font-size: 17px;
-    font-weight: 500;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
-/* selectbox */
+/* 선택창 */
 div[data-baseweb="select"] > div {
     background-color: rgba(255,255,255,0.06);
-    border: 1px solid #a875c9;
+    border: 1px solid #9c6bb8;
     border-radius: 12px;
-    color: white;
 }
 
 div[data-baseweb="select"] span {
-    color: #f5e9f8;
+    color: #f7eafa;
 }
 
 /* 타로 카드 */
 .tarot-card {
-    position: relative;
     margin-top: 35px;
-    padding: 42px 35px;
+    padding: 40px 32px;
     border-radius: 22px;
     background:
-        radial-gradient(circle at 50% 30%, rgba(125, 74, 176, 0.25), transparent 40%),
-        linear-gradient(145deg, #211332, #120b1e);
+        radial-gradient(
+            circle at 50% 25%,
+            rgba(130, 75, 180, 0.28),
+            transparent 42%
+        ),
+        linear-gradient(145deg, #211331, #110a1c);
     border: 1px solid #c69b54;
     box-shadow:
-        0 0 0 5px rgba(198,155,84,0.07),
-        0 0 30px rgba(155, 94, 218, 0.25),
-        inset 0 0 35px rgba(0,0,0,0.35);
+        0 0 0 5px rgba(198,155,84,0.06),
+        0 0 35px rgba(145, 85, 200, 0.25),
+        inset 0 0 30px rgba(0,0,0,0.35);
 }
 
-/* 카드 장식 */
-.card-symbol {
-    text-align: center;
-    font-size: 60px;
-    margin-bottom: 8px;
-    filter: drop-shadow(0 0 12px rgba(245,217,139,0.45));
-}
-
+/* 카드 상단 */
 .card-small {
     text-align: center;
-    color: #c9a45e;
-    font-family: 'Cinzel', serif;
+    color: #c69b54;
     font-size: 12px;
     letter-spacing: 4px;
 }
 
-.card-place {
+.card-symbol {
+    text-align: center;
+    font-size: 62px;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 0 12px rgba(245,217,139,0.45));
+}
+
+.card-name {
     text-align: center;
     color: #f5d98b;
-    font-family: 'Cinzel', serif;
     font-size: 30px;
     font-weight: 700;
-    margin-top: 10px;
-    text-shadow: 0 0 15px rgba(245,217,139,0.25);
+    letter-spacing: 2px;
 }
 
 .card-type {
     text-align: center;
-    color: #d9c8e5;
-    margin-top: 8px;
+    color: #d5c4df;
     font-size: 15px;
+    margin-top: 8px;
 }
 
+/* 구분선 */
 .divider {
     height: 1px;
     background: linear-gradient(
@@ -160,16 +155,16 @@ div[data-baseweb="select"] span {
     margin: 25px 0;
 }
 
-/* 내용 박스 */
+/* 정보 */
 .info-title {
     color: #f5d98b;
     font-size: 15px;
     font-weight: 700;
-    margin-bottom: 8px;
+    margin-bottom: 9px;
 }
 
 .info-text {
-    color: #ded2e5;
+    color: #ded1e5;
     font-size: 14px;
     line-height: 1.8;
 }
@@ -182,16 +177,33 @@ div[data-baseweb="select"] span {
 
 .keyword {
     display: inline-block;
-    padding: 7px 14px;
+    padding: 7px 13px;
     margin: 4px;
     border-radius: 20px;
-    border: 1px solid #8e67a8;
-    background: rgba(142,103,168,0.12);
-    color: #e8d6ef;
+    border: 1px solid #8d65a7;
+    background: rgba(141,101,167,0.12);
+    color: #ead9ef;
     font-size: 13px;
 }
 
-/* 하단 문구 */
+/* 버튼 */
+.stButton > button {
+    width: 100%;
+    height: 45px;
+    border-radius: 12px;
+    border: 1px solid #c69b54;
+    background: rgba(198,155,84,0.08);
+    color: #f5d98b;
+    font-size: 14px;
+}
+
+.stButton > button:hover {
+    border-color: #f5d98b;
+    color: white;
+    background: rgba(198,155,84,0.16);
+}
+
+/* 하단 */
 .footer {
     text-align: center;
     color: #897597;
@@ -200,33 +212,17 @@ div[data-baseweb="select"] span {
     letter-spacing: 1px;
 }
 
-/* 버튼 */
-.stButton > button {
-    width: 100%;
-    border-radius: 12px;
-    border: 1px solid #c69b54;
-    background: rgba(198,155,84,0.08);
-    color: #f5d98b;
-    height: 45px;
-    font-size: 14px;
-}
-
-.stButton > button:hover {
-    border-color: #f5d98b;
-    color: white;
-    background: rgba(198,155,84,0.15);
-}
-
 </style>
-""", unsafe_allow_html=True)
+""",
+    unsafe_allow_html=True
+)
 
 
 # ==========================================
 # MBTI 데이터
 # ==========================================
 
-mbti_data = {
-
+data = {
     "ISTJ": {
         "symbol": "⚖️",
         "name": "THE DEVOTED",
@@ -234,7 +230,7 @@ mbti_data = {
         "style": "쉽게 마음을 열지는 않지만 한번 마음을 주면 오래도록 관계를 지키려는 편이에요.",
         "love": "말보다 행동으로 마음을 표현하는 경우가 많아요. 상대방의 약속을 기억하고 필요한 것을 챙겨주는 식으로 애정을 보여줘요.",
         "attraction": "상대방에게 안정감과 신뢰가 느껴질 때 천천히 호감이 깊어져요.",
-        "date": "조용한 카페에서 이야기하기 · 계획적인 여행 · 함께 맛있는 식사하기",
+        "date": "조용한 카페 · 계획적인 여행 · 함께 맛있는 식사",
         "keywords": ["#신뢰", "#안정감", "#꾸준함", "#책임감"]
     },
 
@@ -245,7 +241,7 @@ mbti_data = {
         "style": "상대방의 작은 변화도 알아차리고 세심하게 챙겨주는 다정한 연애를 하는 편이에요.",
         "love": "상대가 좋아하는 음식이나 사소한 취향을 기억해두었다가 챙겨주는 식으로 마음을 표현해요.",
         "attraction": "자신을 편안하게 해주고 진심으로 배려해주는 사람에게 마음이 가기 쉬워요.",
-        "date": "예쁜 카페 · 맛집 탐방 · 함께 영화 보기 · 소소한 산책",
+        "date": "예쁜 카페 · 맛집 탐방 · 영화 · 소소한 산책",
         "keywords": ["#다정함", "#배려", "#안정", "#세심함"]
     },
 
@@ -267,7 +263,7 @@ mbti_data = {
         "style": "누군가를 좋아한다고 바로 표현하기보다 상대방을 충분히 알아가는 시간을 갖는 편이에요.",
         "love": "상대방의 목표를 응원하거나 문제를 함께 해결해주는 방식으로 마음을 표현해요.",
         "attraction": "자신만의 생각과 목표가 있고 지적인 대화를 할 수 있는 사람에게 매력을 느끼기 쉬워요.",
-        "date": "전시회 · 여행 계획 세우기 · 서점 데이트 · 깊은 대화",
+        "date": "전시회 · 서점 · 여행 계획 세우기 · 깊은 대화",
         "keywords": ["#신중함", "#지적대화", "#독립적", "#깊이"]
     },
 
@@ -278,7 +274,7 @@ mbti_data = {
         "style": "서로의 자유를 존중하면서 부담 없이 자연스럽게 가까워지는 연애를 선호하는 편이에요.",
         "love": "말보다는 함께 무언가를 하면서 자연스럽게 애정을 표현해요.",
         "attraction": "간섭이 적고 서로의 개성을 존중해주는 사람에게 편안함을 느끼기 쉬워요.",
-        "date": "드라이브 · 액티비티 · 맛집 탐방 · 즉흥 여행",
+        "date": "드라이브 · 액티비티 · 맛집 · 즉흥 여행",
         "keywords": ["#자유", "#솔직함", "#즉흥", "#편안함"]
     },
 
@@ -409,7 +405,10 @@ mbti_data = {
 # 제목
 # ==========================================
 
-st.markdown('<div class="moon">☾</div>', unsafe_allow_html=True)
+st.markdown(
+    '<div class="moon">☾</div>',
+    unsafe_allow_html=True
+)
 
 st.markdown(
     '<div class="title">LOVE TAROT</div>',
@@ -433,7 +432,7 @@ st.markdown(
 
 mbti = st.selectbox(
     "MBTI",
-    list(mbti_data.keys()),
+    list(data.keys()),
     index=None,
     placeholder="카드를 뽑기 전에 MBTI를 골라주세요",
     label_visibility="collapsed"
@@ -446,118 +445,112 @@ mbti = st.selectbox(
 
 if mbti:
 
-    data = mbti_data[mbti]
+    result = data[mbti]
 
-    keywords = ""
+    keyword_html = ""
 
-    for keyword in data["keywords"]:
-        keywords += f'<span class="keyword">{keyword}</span>'
+    for keyword in result["keywords"]:
+        keyword_html += '<span class="keyword">' + keyword + '</span>'
+
+    card_html = (
+        '<div class="tarot-card">'
+
+        '<div class="card-small">✦ THE LOVE CARD ✦</div>'
+
+        '<div class="card-symbol">'
+        + result["symbol"] +
+        '</div>'
+
+        '<div class="card-name">'
+        + result["name"] +
+        '</div>'
+
+        '<div class="card-type">'
+        + mbti + ' · ' + result["type"] +
+        '</div>'
+
+        '<div class="divider"></div>'
+
+        '<div class="info-title">'
+        '♡ 당신의 연애 스타일'
+        '</div>'
+
+        '<div class="info-text">'
+        + result["style"] +
+        '</div>'
+
+        '<div class="divider"></div>'
+
+        '<div class="info-title">'
+        '✦ 사랑할 때의 모습'
+        '</div>'
+
+        '<div class="info-text">'
+        + result["love"] +
+        '</div>'
+
+        '<br>'
+
+        '<div class="info-title">'
+        '☾ 이런 사람에게 끌릴 수 있어요'
+        '</div>'
+
+        '<div class="info-text">'
+        + result["attraction"] +
+        '</div>'
+
+        '<br>'
+
+        '<div class="info-title">'
+        '♧ 추천 데이트'
+        '</div>'
+
+        '<div class="info-text">'
+        + result["date"] +
+        '</div>'
+
+        '<div class="keyword-area">'
+        + keyword_html +
+        '</div>'
+
+        '</div>'
+    )
 
     st.markdown(
-        f"""
-<div class="tarot-card">
-
-    <div class="card-small">✦ THE LOVE CARD ✦</div>
-
-    <div class="card-symbol">
-        {data["symbol"]}
-    </div>
-
-    <div class="card-place">
-        {data["name"]}
-    </div>
-
-    <div class="card-type">
-        {mbti} · {data["type"]}
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="info-title">
-        ♡ 당신의 연애 스타일
-    </div>
-
-    <div class="info-text">
-        {data["style"]}
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="info-title">
-        ✦ 사랑할 때의 모습
-    </div>
-
-    <div class="info-text">
-        {data["love"]}
-    </div>
-
-    <br>
-
-    <div class="info-title">
-        ☾ 이런 사람에게 끌릴 수 있어요
-    </div>
-
-    <div class="info-text">
-        {data["attraction"]}
-    </div>
-
-    <br>
-
-    <div class="info-title">
-        ♧ 추천 데이트
-    </div>
-
-    <div class="info-text">
-        {data["date"]}
-    </div>
-
-    <div class="keyword-area">
-        {keywords}
-    </div>
-
-</div>
-""",
+        card_html,
         unsafe_allow_html=True
     )
 
-    st.write("")
-
-    if st.button("🔮 다시 카드를 확인하기", use_container_width=True):
-        st.rerun()
-
-
 else:
 
+    card_html = (
+        '<div class="tarot-card">'
+
+        '<div class="card-small">✦ MYSTIC LOVE ✦</div>'
+
+        '<div class="card-symbol">🔮</div>'
+
+        '<div class="card-name">YOUR LOVE STORY</div>'
+
+        '<div class="card-type">'
+        '아직 당신의 사랑 카드는 닫혀 있어요.'
+        '</div>'
+
+        '<div class="divider"></div>'
+
+        '<div class="info-text" style="text-align:center;">'
+        'MBTI를 선택하면<br>'
+        '당신의 연애 스타일을 담은<br>'
+        '<b style="color:#f5d98b;">LOVE CARD</b>가 나타납니다.'
+        '<br><br>'
+        '✦ 운명은 선택에서 시작됩니다 ✦'
+        '</div>'
+
+        '</div>'
+    )
+
     st.markdown(
-        """
-<div class="tarot-card">
-
-    <div class="card-small">✦ MYSTIC LOVE ✦</div>
-
-    <div class="card-symbol">
-        🔮
-    </div>
-
-    <div class="card-place">
-        YOUR LOVE STORY
-    </div>
-
-    <div class="card-type">
-        아직 당신의 사랑 카드는 닫혀 있어요.
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="info-text" style="text-align:center;">
-        MBTI를 선택하면<br>
-        당신의 연애 스타일을 담은<br>
-        <b style="color:#f5d98b;">LOVE CARD</b>가 나타납니다.
-        <br><br>
-        ✦ 운명은 선택에서 시작됩니다 ✦
-    </div>
-
-</div>
-""",
+        card_html,
         unsafe_allow_html=True
     )
 
