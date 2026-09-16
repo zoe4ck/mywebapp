@@ -1,17 +1,18 @@
 import streamlit as st
+from datetime import date
 
 # ==========================================
 # 페이지 설정
 # ==========================================
 
 st.set_page_config(
-    page_title="LOVE TAROT",
-    page_icon="🔮",
+    page_title="오늘의 사주 한 스푼",
+    page_icon="🌷",
     layout="centered"
 )
 
 # ==========================================
-# 디자인
+# 귀여운 디자인
 # ==========================================
 
 st.markdown(
@@ -20,196 +21,191 @@ st.markdown(
 
 .stApp {
     background:
-        radial-gradient(circle at 50% 10%, rgba(110, 70, 160, 0.35), transparent 30%),
-        radial-gradient(circle at 10% 80%, rgba(80, 40, 130, 0.25), transparent 30%),
-        linear-gradient(180deg, #10091d 0%, #170d29 50%, #0b0612 100%);
-    color: #f8edf9;
+        radial-gradient(circle at 10% 10%, #ffe7f0 0%, transparent 25%),
+        radial-gradient(circle at 90% 20%, #eee5ff 0%, transparent 25%),
+        linear-gradient(180deg, #fff9fc 0%, #faf7ff 100%);
+    color: #594d5d;
 }
 
-/* 별 */
-.stApp:before {
-    content: "✦     ·     ✧       ✦     ·     ✧       ·     ✦";
-    position: fixed;
-    top: 30px;
-    left: 0;
-    width: 100%;
-    text-align: center;
-    color: rgba(255, 225, 255, 0.45);
-    font-size: 18px;
-    letter-spacing: 8px;
-    pointer-events: none;
-}
-
-/* 화면 폭 */
 .block-container {
     max-width: 760px;
     padding-top: 45px;
-    padding-bottom: 50px;
-}
-
-/* 달 */
-.moon {
-    text-align: center;
-    font-size: 70px;
-    margin-bottom: -5px;
-    filter: drop-shadow(0 0 15px rgba(255, 225, 150, 0.6));
+    padding-bottom: 60px;
 }
 
 /* 제목 */
+
+.mini {
+    text-align: center;
+    font-size: 45px;
+    margin-bottom: 5px;
+}
+
 .title {
     text-align: center;
-    color: #f5d98b;
-    font-size: 42px;
-    font-weight: 700;
-    letter-spacing: 6px;
-    text-shadow: 0 0 20px rgba(245, 217, 139, 0.35);
+    color: #e982a6;
+    font-size: 36px;
+    font-weight: 800;
+    letter-spacing: 1px;
 }
 
 .subtitle {
     text-align: center;
-    color: #c5b4d4;
-    font-size: 13px;
-    letter-spacing: 3px;
+    color: #a99aaa;
+    font-size: 14px;
     margin-top: 8px;
-    margin-bottom: 38px;
+    margin-bottom: 30px;
 }
 
-/* 선택 안내 */
+/* 날짜 선택 영역 */
+
+.select-card {
+    background: rgba(255,255,255,0.85);
+    border: 2px solid #f7dce8;
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: 0 8px 25px rgba(190,160,190,0.12);
+}
+
 .select-title {
     text-align: center;
-    color: #ead8ef;
+    color: #d8759c;
     font-size: 17px;
-    margin-bottom: 12px;
-}
-
-/* 선택창 */
-div[data-baseweb="select"] > div {
-    background-color: rgba(255,255,255,0.06);
-    border: 1px solid #9c6bb8;
-    border-radius: 12px;
-}
-
-div[data-baseweb="select"] span {
-    color: #f7eafa;
-}
-
-/* 타로 카드 */
-.tarot-card {
-    margin-top: 35px;
-    padding: 40px 32px;
-    border-radius: 22px;
-    background:
-        radial-gradient(
-            circle at 50% 25%,
-            rgba(130, 75, 180, 0.28),
-            transparent 42%
-        ),
-        linear-gradient(145deg, #211331, #110a1c);
-    border: 1px solid #c69b54;
-    box-shadow:
-        0 0 0 5px rgba(198,155,84,0.06),
-        0 0 35px rgba(145, 85, 200, 0.25),
-        inset 0 0 30px rgba(0,0,0,0.35);
-}
-
-/* 카드 상단 */
-.card-small {
-    text-align: center;
-    color: #c69b54;
-    font-size: 12px;
-    letter-spacing: 4px;
-}
-
-.card-symbol {
-    text-align: center;
-    font-size: 62px;
-    margin-top: 12px;
-    margin-bottom: 5px;
-    filter: drop-shadow(0 0 12px rgba(245,217,139,0.45));
-}
-
-.card-name {
-    text-align: center;
-    color: #f5d98b;
-    font-size: 30px;
     font-weight: 700;
-    letter-spacing: 2px;
+    margin-bottom: 15px;
 }
 
-.card-type {
+/* 날짜 입력 */
+
+div[data-testid="stDateInput"] label {
+    color: #8d7d91 !important;
+}
+
+/* 결과 카드 */
+
+.result-card {
+    background: rgba(255,255,255,0.95);
+    border: 2px solid #f4d8e6;
+    border-radius: 28px;
+    padding: 32px 28px;
+    margin-top: 28px;
+    box-shadow: 0 10px 30px rgba(180,150,180,0.14);
+}
+
+/* 결과 상단 */
+
+.result-emoji {
     text-align: center;
-    color: #d5c4df;
-    font-size: 15px;
+    font-size: 60px;
+}
+
+.result-title {
+    text-align: center;
+    color: #df769d;
+    font-size: 27px;
+    font-weight: 800;
     margin-top: 8px;
 }
 
-/* 구분선 */
-.divider {
-    height: 1px;
-    background: linear-gradient(
-        90deg,
-        transparent,
-        #c69b54,
-        transparent
-    );
-    margin: 25px 0;
+.result-subtitle {
+    text-align: center;
+    color: #a99aaa;
+    font-size: 14px;
+    margin-top: 7px;
 }
 
-/* 정보 */
-.info-title {
-    color: #f5d98b;
+/* 띠 / 오행 */
+
+.badge-area {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 8px 14px;
+    margin: 4px;
+    border-radius: 20px;
+    background: #fff0f6;
+    border: 1px solid #f3cddd;
+    color: #d96f98;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* 섹션 */
+
+.section {
+    background: #fff8fb;
+    border-radius: 19px;
+    padding: 18px 20px;
+    margin-top: 15px;
+}
+
+.section-title {
+    color: #d8759c;
     font-size: 15px;
-    font-weight: 700;
-    margin-bottom: 9px;
+    font-weight: 800;
+    margin-bottom: 8px;
 }
 
-.info-text {
-    color: #ded1e5;
+.section-text {
+    color: #685c6b;
     font-size: 14px;
     line-height: 1.8;
 }
 
-/* 키워드 */
-.keyword-area {
+/* 행운 */
+
+.lucky {
+    background: linear-gradient(
+        135deg,
+        #fff0f6,
+        #f5efff
+    );
+    border-radius: 20px;
+    padding: 20px;
+    margin-top: 18px;
     text-align: center;
-    margin-top: 25px;
 }
 
-.keyword {
-    display: inline-block;
-    padding: 7px 13px;
-    margin: 4px;
-    border-radius: 20px;
-    border: 1px solid #8d65a7;
-    background: rgba(141,101,167,0.12);
-    color: #ead9ef;
-    font-size: 13px;
+.lucky-title {
+    color: #b47bc0;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.lucky-item {
+    color: #756579;
+    font-size: 14px;
+    line-height: 2;
 }
 
 /* 버튼 */
+
 .stButton > button {
     width: 100%;
+    border-radius: 14px;
+    border: 1px solid #efb9cf;
+    background: #fff5f9;
+    color: #d56f98;
     height: 45px;
-    border-radius: 12px;
-    border: 1px solid #c69b54;
-    background: rgba(198,155,84,0.08);
-    color: #f5d98b;
-    font-size: 14px;
+    font-weight: 600;
 }
 
 .stButton > button:hover {
-    border-color: #f5d98b;
-    color: white;
-    background: rgba(198,155,84,0.16);
+    border-color: #df8eae;
+    background: #ffeaf2;
+    color: #c75d87;
 }
 
 /* 하단 */
+
 .footer {
     text-align: center;
-    color: #897597;
+    color: #b9aaba;
     font-size: 12px;
-    margin-top: 35px;
-    letter-spacing: 1px;
+    margin-top: 30px;
 }
 
 </style>
@@ -219,186 +215,118 @@ div[data-baseweb="select"] span {
 
 
 # ==========================================
-# MBTI 데이터
+# 데이터
 # ==========================================
 
-data = {
-    "ISTJ": {
-        "symbol": "⚖️",
-        "name": "THE DEVOTED",
-        "type": "신뢰를 쌓아가는 사랑",
-        "style": "쉽게 마음을 열지는 않지만 한번 마음을 주면 오래도록 관계를 지키려는 편이에요.",
-        "love": "말보다 행동으로 마음을 표현하는 경우가 많아요. 상대방의 약속을 기억하고 필요한 것을 챙겨주는 식으로 애정을 보여줘요.",
-        "attraction": "상대방에게 안정감과 신뢰가 느껴질 때 천천히 호감이 깊어져요.",
-        "date": "조용한 카페 · 계획적인 여행 · 함께 맛있는 식사",
-        "keywords": ["#신뢰", "#안정감", "#꾸준함", "#책임감"]
+animal_data = [
+    ("쥐", "🐭"),
+    ("소", "🐮"),
+    ("호랑이", "🐯"),
+    ("토끼", "🐰"),
+    ("용", "🐲"),
+    ("뱀", "🐍"),
+    ("말", "🐴"),
+    ("양", "🐑"),
+    ("원숭이", "🐵"),
+    ("닭", "🐔"),
+    ("개", "🐶"),
+    ("돼지", "🐷")
+]
+
+element_data = {
+    "목": {
+        "emoji": "🌱",
+        "color": "초록",
+        "keyword": "성장과 새로운 시작",
+        "personality": "새로운 것을 배우고 성장하려는 마음이 강한 편이에요. 호기심이 많고 자신의 가능성을 넓혀가는 과정에서 에너지를 얻는 타입으로 볼 수 있어요.",
+        "love": "연애에서도 함께 성장할 수 있는 관계를 중요하게 생각하는 편이에요. 상대방의 생각과 가능성을 존중하면서 천천히 가까워지는 모습이 잘 어울려요.",
+        "study": "한 가지를 오래 붙잡기보다 새로운 내용을 배우고 직접 응용해보는 방식이 잘 맞을 수 있어요."
     },
 
-    "ISFJ": {
-        "symbol": "🌙",
-        "name": "THE TENDER HEART",
-        "type": "따뜻하게 감싸주는 사랑",
-        "style": "상대방의 작은 변화도 알아차리고 세심하게 챙겨주는 다정한 연애를 하는 편이에요.",
-        "love": "상대가 좋아하는 음식이나 사소한 취향을 기억해두었다가 챙겨주는 식으로 마음을 표현해요.",
-        "attraction": "자신을 편안하게 해주고 진심으로 배려해주는 사람에게 마음이 가기 쉬워요.",
-        "date": "예쁜 카페 · 맛집 탐방 · 영화 · 소소한 산책",
-        "keywords": ["#다정함", "#배려", "#안정", "#세심함"]
+    "화": {
+        "emoji": "🔥",
+        "color": "빨강",
+        "keyword": "열정과 표현",
+        "personality": "감정과 에너지를 비교적 적극적으로 표현하는 성향으로 볼 수 있어요. 좋아하는 일에는 집중력이 높아지고 주변에 활기를 주는 타입이에요.",
+        "love": "마음이 생기면 상대방에게 따뜻한 관심을 표현하는 편이에요. 함께 재미있는 경험을 만들면서 관계가 깊어지는 스타일과 잘 어울려요.",
+        "study": "목표가 분명할 때 집중력이 올라가기 쉬워요. 작은 목표를 정하고 달성하는 방식이 도움이 될 수 있어요."
     },
 
-    "INFJ": {
-        "symbol": "🌌",
-        "name": "THE MYSTIC",
-        "type": "깊은 마음을 나누는 사랑",
-        "style": "겉으로는 차분해 보여도 마음속에서는 상대방과의 관계를 깊게 생각하는 편이에요.",
-        "love": "상대방의 말에 담긴 의미를 세심하게 살피고 진솔한 대화를 통해 애정을 표현해요.",
-        "attraction": "겉모습보다 자신의 가치관이나 생각을 이해해주는 사람에게 끌리는 편이에요.",
-        "date": "밤 산책 · 조용한 카페 · 전시회 · 오래 이야기할 수 있는 장소",
-        "keywords": ["#깊은대화", "#공감", "#낭만", "#진심"]
+    "토": {
+        "emoji": "🌷",
+        "color": "노랑",
+        "keyword": "안정과 균형",
+        "personality": "차분하게 상황을 살피고 주변 사람들과 균형을 맞추려는 성향으로 볼 수 있어요. 꾸준함과 안정적인 환경에서 장점을 발휘하기 좋아요.",
+        "love": "가볍게 시작하기보다 신뢰를 쌓으면서 안정적인 관계를 만들어가는 것을 편하게 느끼는 스타일이에요.",
+        "study": "일정한 루틴을 만들어 꾸준하게 공부하는 방식과 잘 맞을 수 있어요."
     },
 
-    "INTJ": {
-        "symbol": "🔮",
-        "name": "THE STRATEGIST",
-        "type": "천천히 깊어지는 사랑",
-        "style": "누군가를 좋아한다고 바로 표현하기보다 상대방을 충분히 알아가는 시간을 갖는 편이에요.",
-        "love": "상대방의 목표를 응원하거나 문제를 함께 해결해주는 방식으로 마음을 표현해요.",
-        "attraction": "자신만의 생각과 목표가 있고 지적인 대화를 할 수 있는 사람에게 매력을 느끼기 쉬워요.",
-        "date": "전시회 · 서점 · 여행 계획 세우기 · 깊은 대화",
-        "keywords": ["#신중함", "#지적대화", "#독립적", "#깊이"]
+    "금": {
+        "emoji": "⭐",
+        "color": "하양",
+        "keyword": "기준과 집중",
+        "personality": "자신만의 기준이 뚜렷하고 하고 싶은 일을 명확하게 정하는 성향으로 볼 수 있어요. 집중해야 할 때 몰입하는 힘을 중요하게 생각하는 타입이에요.",
+        "love": "상대방에게 쉽게 휩쓸리기보다 자신이 정말 좋아하는 사람인지 천천히 확인하는 편으로 볼 수 있어요.",
+        "study": "목표와 결과가 명확할수록 집중하기 쉬워요. 공부할 내용을 구체적인 단위로 나누면 좋아요."
     },
 
-    "ISTP": {
-        "symbol": "🗡️",
-        "name": "THE FREE SOUL",
-        "type": "자유롭고 솔직한 사랑",
-        "style": "서로의 자유를 존중하면서 부담 없이 자연스럽게 가까워지는 연애를 선호하는 편이에요.",
-        "love": "말보다는 함께 무언가를 하면서 자연스럽게 애정을 표현해요.",
-        "attraction": "간섭이 적고 서로의 개성을 존중해주는 사람에게 편안함을 느끼기 쉬워요.",
-        "date": "드라이브 · 액티비티 · 맛집 · 즉흥 여행",
-        "keywords": ["#자유", "#솔직함", "#즉흥", "#편안함"]
-    },
-
-    "ISFP": {
-        "symbol": "🌹",
-        "name": "THE ROMANTIC",
-        "type": "감각적인 낭만을 즐기는 사랑",
-        "style": "연애의 순간순간에서 느껴지는 감정과 분위기를 중요하게 생각하는 편이에요.",
-        "love": "작은 선물이나 예쁜 장소, 함께하는 특별한 순간으로 마음을 표현하는 경우가 많아요.",
-        "attraction": "따뜻하고 부드러운 분위기를 가진 사람에게 자연스럽게 끌릴 수 있어요.",
-        "date": "미술관 · 예쁜 카페 · 공원 산책 · 사진 찍기",
-        "keywords": ["#감성", "#낭만", "#예술", "#순수함"]
-    },
-
-    "INFP": {
-        "symbol": "🪽",
-        "name": "THE DREAMER",
-        "type": "동화 같은 사랑",
-        "style": "사랑에 대한 이상과 자신만의 낭만을 중요하게 생각하는 편이에요.",
-        "love": "상대방의 이야기를 오래 들어주고 감정을 깊이 공감하면서 마음을 표현해요.",
-        "attraction": "자신의 내면을 이해해주고 진심으로 공감해주는 사람에게 마음이 깊어지기 쉬워요.",
-        "date": "별 보기 · 밤 산책 · 감성 카페 · 여행",
-        "keywords": ["#낭만", "#공감", "#순수", "#감성"]
-    },
-
-    "INTP": {
-        "symbol": "⭐",
-        "name": "THE OBSERVER",
-        "type": "호기심에서 시작되는 사랑",
-        "style": "상대방을 알아가는 과정 자체를 흥미롭게 느끼며 천천히 가까워지는 편이에요.",
-        "love": "관심 있는 주제로 이야기를 나누거나 상대방의 궁금증을 함께 해결하면서 친밀감을 표현해요.",
-        "attraction": "독특한 생각을 가지고 있고 대화가 잘 통하는 사람에게 관심이 생기기 쉬워요.",
-        "date": "서점 · 박물관 · 보드게임 · 새로운 장소 탐방",
-        "keywords": ["#호기심", "#대화", "#독특함", "#지적매력"]
-    },
-
-    "ESTP": {
-        "symbol": "🔥",
-        "name": "THE ADVENTURER",
-        "type": "짜릿하고 생생한 사랑",
-        "style": "좋아하는 사람과 직접 다양한 경험을 하면서 관계를 만들어가는 편이에요.",
-        "love": "재미있는 데이트를 계획하거나 즉흥적으로 새로운 경험을 함께 하며 마음을 표현해요.",
-        "attraction": "자신감 있고 함께 있을 때 즐거운 에너지를 주는 사람에게 끌리기 쉬워요.",
-        "date": "놀이공원 · 스포츠 · 여행 · 맛집 투어",
-        "keywords": ["#열정", "#모험", "#즉흥", "#즐거움"]
-    },
-
-    "ESFP": {
-        "symbol": "☀️",
-        "name": "THE SUN",
-        "type": "행복을 나누는 사랑",
-        "style": "좋아하는 사람과 함께하는 순간 자체를 즐기며 밝고 표현력 있는 연애를 하는 편이에요.",
-        "love": "칭찬이나 애정 표현을 직접적으로 하고 함께 재미있는 추억을 만드는 것을 좋아해요.",
-        "attraction": "자신의 모습을 편하게 보여줄 수 있고 함께 웃을 수 있는 사람에게 끌리기 쉬워요.",
-        "date": "축제 · 맛집 · 놀이공원 · 여행",
-        "keywords": ["#행복", "#표현력", "#활발함", "#추억"]
-    },
-
-    "ENFP": {
-        "symbol": "✨",
-        "name": "THE SPARK",
-        "type": "설렘이 가득한 사랑",
-        "style": "좋아하는 사람이 생기면 관계의 가능성을 상상하며 빠르게 설렘을 느낄 수 있어요.",
-        "love": "재미있는 이야기와 장난, 깜짝 이벤트 등 다양한 방법으로 마음을 표현해요.",
-        "attraction": "자신의 개성을 존중하면서 함께 새로운 것을 경험할 수 있는 사람에게 끌리기 쉬워요.",
-        "date": "즉흥 여행 · 새로운 맛집 · 전시 · 야경",
-        "keywords": ["#설렘", "#호기심", "#자유", "#열정"]
-    },
-
-    "ENTP": {
-        "symbol": "☄️",
-        "name": "THE WILDCARD",
-        "type": "예측할 수 없는 두근거림",
-        "style": "연애에서도 새로운 자극과 재미있는 대화를 중요하게 생각하는 편이에요.",
-        "love": "장난과 토론, 재미있는 아이디어를 공유하면서 자연스럽게 호감을 표현해요.",
-        "attraction": "자신만의 생각이 뚜렷하고 대화가 흥미로운 사람에게 관심이 생기기 쉬워요.",
-        "date": "새로운 맛집 · 전시회 · 여행 · 이색 체험",
-        "keywords": ["#재치", "#토론", "#자극", "#호기심"]
-    },
-
-    "ESTJ": {
-        "symbol": "👑",
-        "name": "THE LEADER",
-        "type": "확실하고 책임감 있는 사랑",
-        "style": "관계에서도 자신의 마음과 의도를 비교적 명확하게 표현하는 편이에요.",
-        "love": "상대방에게 필요한 것을 직접 해결해주거나 계획을 세우며 마음을 표현해요.",
-        "attraction": "자신의 삶을 책임감 있게 살아가며 서로 약속을 지킬 수 있는 사람에게 끌리기 쉬워요.",
-        "date": "맛집 · 여행 · 쇼핑 · 계획적인 데이트",
-        "keywords": ["#책임감", "#확실함", "#추진력", "#신뢰"]
-    },
-
-    "ESFJ": {
-        "symbol": "💐",
-        "name": "THE LOVER",
-        "type": "마음을 아낌없이 나누는 사랑",
-        "style": "상대방과 함께하는 시간을 소중하게 생각하고 애정을 적극적으로 표현하는 편이에요.",
-        "love": "상대방의 기념일이나 취향을 기억하고 작은 이벤트를 준비하는 식으로 사랑을 표현해요.",
-        "attraction": "따뜻하고 예의 바르며 자신의 마음을 솔직하게 표현하는 사람에게 끌리기 쉬워요.",
-        "date": "맛집 · 카페 · 쇼핑 · 기념일 데이트",
-        "keywords": ["#애정표현", "#배려", "#다정함", "#추억"]
-    },
-
-    "ENFJ": {
-        "symbol": "💫",
-        "name": "THE GUIDE",
-        "type": "서로를 성장시키는 사랑",
-        "style": "상대방의 감정과 상황을 세심하게 살피면서 관계를 발전시켜 나가는 편이에요.",
-        "love": "상대방의 꿈이나 고민을 진심으로 들어주고 응원하며 애정을 표현해요.",
-        "attraction": "진솔한 대화를 할 수 있고 서로에게 긍정적인 영향을 줄 수 있는 사람에게 끌리기 쉬워요.",
-        "date": "전시회 · 여행 · 카페 · 함께하는 취미",
-        "keywords": ["#공감", "#응원", "#성장", "#진심"]
-    },
-
-    "ENTJ": {
-        "symbol": "🌟",
-        "name": "THE COMMANDER",
-        "type": "열정적으로 이끄는 사랑",
-        "style": "좋아하는 사람에게 적극적으로 다가가고 관계를 발전시키기 위해 행동하는 편이에요.",
-        "love": "상대방의 목표를 지원하고 함께 미래를 계획하면서 마음을 표현해요.",
-        "attraction": "자신의 의견과 목표가 분명하고 함께 성장할 수 있는 사람에게 끌리기 쉬워요.",
-        "date": "여행 · 새로운 레스토랑 · 전시 · 특별한 이벤트",
-        "keywords": ["#열정", "#목표", "#추진력", "#성장"]
+    "수": {
+        "emoji": "💧",
+        "color": "파랑",
+        "keyword": "유연함과 감성",
+        "personality": "상황에 따라 유연하게 생각하고 주변의 분위기를 세심하게 느끼는 성향으로 볼 수 있어요. 혼자 생각을 정리하는 시간도 중요하게 여기는 편이에요.",
+        "love": "상대방의 감정을 중요하게 생각하고 서로 편안하게 이야기할 수 있는 관계에서 애정을 느끼기 쉬워요.",
+        "study": "조용하고 편안한 환경에서 자신만의 속도로 집중하는 방식이 잘 맞을 수 있어요."
     }
 }
+
+
+# ==========================================
+# 함수
+# ==========================================
+
+def get_animal(year):
+    index = (year - 4) % 12
+    return animal_data[index]
+
+
+def get_element(year):
+    # 재미용 오행 계산
+    index = year % 5
+    elements = ["목", "화", "토", "금", "수"]
+    return elements[index]
+
+
+def get_season(month):
+    if month in [3, 4, 5]:
+        return "봄"
+    elif month in [6, 7, 8]:
+        return "여름"
+    elif month in [9, 10, 11]:
+        return "가을"
+    else:
+        return "겨울"
+
+
+def get_lucky(month, element):
+    lucky_colors = {
+        "목": ["초록", "연두", "아이보리"],
+        "화": ["분홍", "주황", "빨강"],
+        "토": ["베이지", "노랑", "브라운"],
+        "금": ["하양", "실버", "회색"],
+        "수": ["하늘색", "파랑", "남색"]
+    }
+
+    lucky_items = {
+        "봄": "작은 꽃 모양 소품 🌷",
+        "여름": "시원한 음료 🧋",
+        "가을": "향기로운 향수 🌿",
+        "겨울": "포근한 니트 🧸"
+    }
+
+    colors = lucky_colors[element]
+
+    return colors, lucky_items[get_season(month)]
 
 
 # ==========================================
@@ -406,36 +334,40 @@ data = {
 # ==========================================
 
 st.markdown(
-    '<div class="moon">☾</div>',
+    '<div class="mini">🌙</div>',
     unsafe_allow_html=True
 )
 
 st.markdown(
-    '<div class="title">LOVE TAROT</div>',
+    '<div class="title">오늘의 사주 한 스푼</div>',
     unsafe_allow_html=True
 )
 
 st.markdown(
-    '<div class="subtitle">YOUR MBTI · YOUR LOVE STORY</div>',
-    unsafe_allow_html=True
-)
-
-st.markdown(
-    '<div class="select-title">✦ 당신의 MBTI를 선택해주세요 ✦</div>',
+    '<div class="subtitle">생년월일 속에 담긴 나만의 작은 이야기 ✦</div>',
     unsafe_allow_html=True
 )
 
 
 # ==========================================
-# MBTI 선택
+# 날짜 선택
 # ==========================================
 
-mbti = st.selectbox(
-    "MBTI",
-    list(data.keys()),
-    index=None,
-    placeholder="카드를 뽑기 전에 MBTI를 골라주세요",
-    label_visibility="collapsed"
+st.markdown(
+    '<div class="select-card">'
+    '<div class="select-title">'
+    '🌷 생년월일을 알려주세요'
+    '</div>'
+    '</div>',
+    unsafe_allow_html=True
+)
+
+birth_date = st.date_input(
+    "생년월일",
+    value=None,
+    min_value=date(1900, 1, 1),
+    max_value=date.today(),
+    format="YYYY-MM-DD"
 )
 
 
@@ -443,114 +375,161 @@ mbti = st.selectbox(
 # 결과
 # ==========================================
 
-if mbti:
+if birth_date is not None:
 
-    result = data[mbti]
+    year = birth_date.year
+    month = birth_date.month
+    day = birth_date.day
 
-    keyword_html = ""
+    animal_name, animal_emoji = get_animal(year)
 
-    for keyword in result["keywords"]:
-        keyword_html += '<span class="keyword">' + keyword + '</span>'
+    element = get_element(year)
+    element_info = element_data[element]
 
-    card_html = (
-        '<div class="tarot-card">'
+    season = get_season(month)
 
-        '<div class="card-small">✦ THE LOVE CARD ✦</div>'
+    lucky_colors, lucky_item = get_lucky(month, element)
 
-        '<div class="card-symbol">'
-        + result["symbol"] +
-        '</div>'
-
-        '<div class="card-name">'
-        + result["name"] +
-        '</div>'
-
-        '<div class="card-type">'
-        + mbti + ' · ' + result["type"] +
-        '</div>'
-
-        '<div class="divider"></div>'
-
-        '<div class="info-title">'
-        '♡ 당신의 연애 스타일'
-        '</div>'
-
-        '<div class="info-text">'
-        + result["style"] +
-        '</div>'
-
-        '<div class="divider"></div>'
-
-        '<div class="info-title">'
-        '✦ 사랑할 때의 모습'
-        '</div>'
-
-        '<div class="info-text">'
-        + result["love"] +
-        '</div>'
-
-        '<br>'
-
-        '<div class="info-title">'
-        '☾ 이런 사람에게 끌릴 수 있어요'
-        '</div>'
-
-        '<div class="info-text">'
-        + result["attraction"] +
-        '</div>'
-
-        '<br>'
-
-        '<div class="info-title">'
-        '♧ 추천 데이트'
-        '</div>'
-
-        '<div class="info-text">'
-        + result["date"] +
-        '</div>'
-
-        '<div class="keyword-area">'
-        + keyword_html +
-        '</div>'
-
-        '</div>'
-    )
+    # --------------------------
+    # 결과 카드
+    # --------------------------
 
     st.markdown(
-        card_html,
+        '<div class="result-card">'
+        '<div class="result-emoji">'
+        + animal_emoji +
+        '</div>'
+        '<div class="result-title">'
+        + animal_name +
+        '띠의 작은 운세'
+        '</div>'
+        '<div class="result-subtitle">'
+        + str(year) + '년 ' + str(month) + '월 ' + str(day) + '일'
+        '</div>'
+
+        '<div class="badge-area">'
+        '<span class="badge">'
+        + element_info["emoji"] + ' 오행 · ' + element +
+        '</span>'
+
+        '<span class="badge">'
+        + '🌸 ' + season +
+        '</span>'
+
+        '<span class="badge">'
+        + '🐾 ' + animal_name + '띠' +
+        '</span>'
+        '</div>'
+
+        '</div>',
         unsafe_allow_html=True
     )
 
-else:
-
-    card_html = (
-        '<div class="tarot-card">'
-
-        '<div class="card-small">✦ MYSTIC LOVE ✦</div>'
-
-        '<div class="card-symbol">🔮</div>'
-
-        '<div class="card-name">YOUR LOVE STORY</div>'
-
-        '<div class="card-type">'
-        '아직 당신의 사랑 카드는 닫혀 있어요.'
-        '</div>'
-
-        '<div class="divider"></div>'
-
-        '<div class="info-text" style="text-align:center;">'
-        'MBTI를 선택하면<br>'
-        '당신의 연애 스타일을 담은<br>'
-        '<b style="color:#f5d98b;">LOVE CARD</b>가 나타납니다.'
-        '<br><br>'
-        '✦ 운명은 선택에서 시작됩니다 ✦'
-        '</div>'
-
-        '</div>'
-    )
+    # --------------------------
+    # 기본 성향
+    # --------------------------
 
     st.markdown(
-        card_html,
+        '<div class="section">'
+        '<div class="section-title">'
+        + element_info["emoji"] +
+        ' 나의 기본 성향'
+        '</div>'
+
+        '<div class="section-text">'
+        + element_info["personality"] +
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+    # --------------------------
+    # 연애운
+    # --------------------------
+
+    st.markdown(
+        '<div class="section">'
+        '<div class="section-title">'
+        '💗 나의 연애 이야기'
+        '</div>'
+
+        '<div class="section-text">'
+        + element_info["love"] +
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+    # --------------------------
+    # 공부 / 진로
+    # --------------------------
+
+    st.markdown(
+        '<div class="section">'
+        '<div class="section-title">'
+        '📚 공부와 진로'
+        '</div>'
+
+        '<div class="section-text">'
+        + element_info["study"] +
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+    # --------------------------
+    # 행운
+    # --------------------------
+
+    lucky_color_text = " · ".join(lucky_colors)
+
+    st.markdown(
+        '<div class="lucky">'
+        '<div class="lucky-title">'
+        '🍀 오늘의 작은 행운'
+        '</div>'
+
+        '<div class="lucky-item">'
+        '🎨 행운의 색 · ' + lucky_color_text +
+        '<br>'
+        '🎁 행운의 아이템 · ' + lucky_item +
+        '<br>'
+        '🌷 오늘의 키워드 · ' + element_info["keyword"] +
+        '</div>'
+
+        '</div>',
+        unsafe_allow_html=True
+    )
+
+    st.write("")
+
+    if st.button("🌙 다시 운세 보기", use_container_width=True):
+        st.rerun()
+
+else:
+
+    # 날짜 선택 전 화면
+
+    st.markdown(
+        '<div class="result-card">'
+        '<div class="result-emoji">🐰🌙</div>'
+
+        '<div class="result-title">'
+        '아직 운세가 잠들어 있어요'
+        '</div>'
+
+        '<div class="result-subtitle">'
+        '생년월일을 선택하면 작은 운세 카드가 나타나요'
+        '</div>'
+
+        '<div class="section">'
+        '<div class="section-text" style="text-align:center;">'
+        '두근두근… 💗<br>'
+        '당신의 생년월일을 기다리고 있어요.'
+        '</div>'
+        '</div>'
+
+        '</div>',
         unsafe_allow_html=True
     )
 
@@ -561,7 +540,7 @@ else:
 
 st.markdown(
     '<div class="footer">'
-    '✦ MBTI 특성을 바탕으로 한 재미있는 연애 콘텐츠입니다 ✦'
+    '🌷 재미로 가볍게 즐겨보는 생년월일 운세 콘텐츠예요 ♡'
     '</div>',
     unsafe_allow_html=True
 )
